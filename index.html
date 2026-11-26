@@ -14,14 +14,34 @@ h2{font:600 19px/1.2 "SB Sans Display",system-ui,sans-serif;margin:0 0 4px}
 h2 span{color:var(--acc)}
 .meta{color:var(--mut);font-size:14px;margin:0 0 12px}
 .wrap{overflow-x:auto;background:#000;border:1px solid var(--line);border-radius:6px}
-video{display:block;width:100%;min-width:1100px;height:auto;aspect-ratio:3232/288;background:#000}
+video{display:block;width:100%;min-width:1100px;height:auto;aspect-ratio:3232/288;background:#000;cursor:pointer;object-fit:contain}
+.bar{display:flex;align-items:center;gap:12px;margin:8px 0 0;color:var(--mut);font-size:14px;font-variant-numeric:tabular-nums}
+.bar button{flex:none;min-width:92px;height:34px;padding:0 12px;border:1px solid var(--line);border-radius:6px;background:#141714;color:var(--fg);font:inherit;cursor:pointer}
+.bar button:hover{border-color:var(--acc)}.bar button.st{min-width:40px}
+.bar input{flex:1;min-width:80px;accent-color:var(--acc);cursor:pointer}
+.bar .fm{white-space:nowrap}
 </style></head><body><main>
 <h1>Умное кольцо · медиафасад «Октябрь» · предмастер</h1>
-<p class="sub">3232×288, 30 к/с, 25 с, без звука. Версия v34. На узком экране ленту можно прокручивать вбок.</p>
+<p class="sub">3232×288, 30 к/с, 25 с, без звука. Версия v34. Клик по кадру или кнопка под ним — пауза, кадр остаётся открыт целиком. На узком экране ленту можно прокручивать вбок.</p>
 <section><h2>Вариант <span>A</span></h2><p class="meta">v34 · кольцо в точках снаружи и внутри, статистика кружками, люди из точек</p>
-<div class="wrap"><video src="v/oktyabr_predmaster_a.mp4?v=34" muted loop autoplay playsinline controls preload="auto"></video></div></section>
+<div class="wrap"><video src="v/oktyabr_predmaster_a.mp4?v=34" muted loop autoplay playsinline preload="auto"></video></div>
+<div class="bar"><button class="pp" type="button">Пауза</button><button class="st" type="button" data-d="-1" title="Кадр назад">‹</button><button class="st" type="button" data-d="1" title="Кадр вперёд">›</button><input type="range" min="0" max="1000" value="0" step="1" aria-label="Перемотка"><span class="tm">0:00 / 0:00</span><span class="fm">3232×288 · 30 fps</span></div></section>
 <section><h2>Вариант <span>B</span></h2><p class="meta">v34 · кольцо гладкое, без точек, статистика столбиками, как в приложении, люди фото</p>
-<div class="wrap"><video src="v/oktyabr_predmaster_b.mp4?v=34" muted loop autoplay playsinline controls preload="auto"></video></div></section>
+<div class="wrap"><video src="v/oktyabr_predmaster_b.mp4?v=34" muted loop autoplay playsinline preload="auto"></video></div>
+<div class="bar"><button class="pp" type="button">Пауза</button><button class="st" type="button" data-d="-1" title="Кадр назад">‹</button><button class="st" type="button" data-d="1" title="Кадр вперёд">›</button><input type="range" min="0" max="1000" value="0" step="1" aria-label="Перемотка"><span class="tm">0:00 / 0:00</span><span class="fm">3232×288 · 30 fps</span></div></section>
 <section><h2>Вариант <span>C</span> · цвет</h2><p class="meta">v34 · фрагмент с цветными людьми, 7 с</p>
-<div class="wrap"><video src="v/oktyabr_predmaster_c.mp4?v=34" muted loop autoplay playsinline controls preload="auto"></video></div></section>
+<div class="wrap"><video src="v/oktyabr_predmaster_c.mp4?v=34" muted loop autoplay playsinline preload="auto"></video></div>
+<div class="bar"><button class="pp" type="button">Пауза</button><button class="st" type="button" data-d="-1" title="Кадр назад">‹</button><button class="st" type="button" data-d="1" title="Кадр вперёд">›</button><input type="range" min="0" max="1000" value="0" step="1" aria-label="Перемотка"><span class="tm">0:00 / 0:00</span><span class="fm">3232×288 · 30 fps</span></div></section>
+<script>
+document.querySelectorAll('section').forEach(function(s){var v=s.querySelector('video'),b=s.querySelector('.pp'),r=s.querySelector('input'),t=s.querySelector('.tm'),drag=false;
+function f(x){x=Math.max(0,x||0);return Math.floor(x/60)+':'+('0'+Math.floor(x%60)).slice(-2)}
+function upd(){b.textContent=v.paused?'Играть':'Пауза';var d=v.duration||0;if(!drag&&d)r.value=Math.round(v.currentTime/d*1000);t.textContent=f(v.currentTime)+' / '+f(d)}
+function tog(){v.paused?v.play():v.pause()}
+v.addEventListener('click',tog);b.addEventListener('click',tog);
+['play','pause','timeupdate','loadedmetadata','seeked'].forEach(function(e){v.addEventListener(e,upd)});
+r.addEventListener('input',function(){drag=true;if(v.duration)v.currentTime=r.value/1000*v.duration});
+r.addEventListener('change',function(){drag=false});
+s.querySelectorAll('.st').forEach(function(q){q.addEventListener('click',function(){v.pause();v.currentTime=Math.min(Math.max(0,v.currentTime+q.dataset.d/30),(v.duration||1)-0.001)})});
+(function loop(){if(!v.paused)upd();requestAnimationFrame(loop)})();upd()});
+</script>
 </main></body></html>
